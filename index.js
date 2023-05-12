@@ -156,7 +156,6 @@ app.get('/api/users/:_id/logs', (req, res) => {
       user_id:req.params['_id'],
     })    
     .then(data => {
-      console.log(data)
       res.json({
         username:data[0].username,
         count:data.length,
@@ -177,6 +176,6 @@ app.get('/', (req, res) => {
 
 
 
-const listener = app.listen(process.env.PORT || 3000, () => {
+const listener = app.listen(3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)
 })
