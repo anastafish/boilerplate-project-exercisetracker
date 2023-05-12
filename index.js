@@ -54,13 +54,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       user_id:user.id
     })
     newExercise.save().then(exercise => {
-      res.json({
-        _id:user.id,
-        username:user.username,
-        date:exercise.date,
-        duration:exercise.duration,
-        description:exercise.description,
-      })
+      res.json(exercise)
     }).catch(err => console.log(err))
   })  
 })
