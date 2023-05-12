@@ -22,9 +22,9 @@ const userSchema = mongoose.Schema({
 })
 const Users = mongoose.model('Users', userSchema)
 
-
-
 app.use(bodyParser.urlencoded({extended:false}))
+app.use(cors())
+app.use(express.static('public'))
 
 app.post('/api/users', (req, res) => {
   const newUser = new Users({
@@ -166,8 +166,7 @@ app.get('/api/users/:_id/logs', (req, res) => {
   }
 })
 
-app.use(cors())
-app.use(express.static('public'))
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
