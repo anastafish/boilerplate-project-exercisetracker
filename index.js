@@ -45,7 +45,8 @@ app.get('/api/users', (req, res) => {
 })
 
 app.post('/api/users/:_id/exercises', (req, res) => {
-  Users.findById(req.body[':_id']).then(user => {
+  Users.findById(req.params['_id']).then(user => {
+    console.log(user.username)
     const newExercise = new Exercise({
       username: user.username,
       description: req.body.description,
@@ -54,8 +55,11 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       user_id:user.id
     })
     newExercise.save().then(exercise => {
+      console.log(exercise)
+      console.log(user)
       res.json({
-        ...user._doc,
+        id:user.id,
+        username:user.username,
         description:exercise.description,
         duration:exercise.duration,
         date:exercise.date,
