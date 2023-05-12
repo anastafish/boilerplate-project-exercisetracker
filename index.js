@@ -50,7 +50,7 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       username: user.username,
       description: req.body.description,
       duration: req.body.duration,
-      date: req.body.date,
+      date: req.body.date || new Date().toDateString(),
       user_id:user.id
     })
     newExercise.save().then(exercise => {
