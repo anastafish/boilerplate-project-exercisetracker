@@ -45,16 +45,21 @@ app.get('/api/users', (req, res) => {
 })
 
 app.post('/api/users/:_id/exercises', (req, res) => {
-  Users.findById(req.body[':_id']).then(data => {
+  Users.findById(req.body[':_id']).then(user => {
     const newExercise = new Exercise({
-      username: data.username,
+      username: user.username,
       description: req.body.description,
       duration: req.body.duration,
       date: req.body.date,
-      user_id:data.id
+      user_id:user.id
     })
-    newExercise.save().then(data => {
-      res.json(data)
+    newExercise.save().then(exercise => {
+      res.json({
+        ...user._doc,
+        description:exercise.description,
+        duration:exercise.duration,
+        date:exercise.date,
+      })
     }).catch(err => console.log(err))
   })  
 })
