@@ -54,6 +54,10 @@ app.post('/api/users/:_id/exercises', (req, res) => {
       user_id:user.id
     })
     newExercise.save().then(exercise => {
+      console.log({
+        ...exercise._doc,
+        date: new Date(exercise.date).toDateString()
+      })
       res.json(exercise)
     }).catch(err => console.log(err))
   })  
