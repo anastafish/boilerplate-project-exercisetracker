@@ -33,7 +33,7 @@ app.post('/api/users', (req, res) => {
   newUser.save().then(data => {
     res.json({
       username:data.username,
-      id:data.id
+      _id:data.id
     })
   }).catch(err => console.log(err))
 })
