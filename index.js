@@ -76,23 +76,28 @@ app.get('/api/users/:_id/logs', (req, res) => {
   .then(data => {
     let temp = data;
     if (from) {
-      temp = temp.filter(exe => (exe.date) > from) 
+      const fromDate= new Date(from)
+      temp = temp.filter(exe => new Date(exe.date) > fromDate) 
     }
     if (to) {
-      temp = temp.filter(exe => (exe.date) < to) 
+      const toDate= new Date(to)
+      temp = temp.filter(exe => new Date(exe.date) < toDate) 
     }
     if (limit) {
       temp = temp.slice(0,limit)
     }
-
-    const log = {
-      _id:req.params['_id'],
-      username:temp[0].username,
-      count:parseFloat(temp.length),
-      log:temp
-    }
-
-    res.json(log)
+    Users.findById(req.params['_id'])
+    .then(data => {
+      const log = {
+        _id:req.params['_id'],
+        username:data.username,
+        count:parseFloat(temp.length),
+        log:temp
+      }
+  
+      res.json(log)
+    })
+    
   })
 //   if (req.query.from && req.query.to && req.query.limit) {
 //     Exercise.find({
