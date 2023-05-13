@@ -71,112 +71,135 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 })
 
 app.get('/api/users/:_id/logs', (req, res) => {
-  if (req.query.from && req.query.to && req.query.limit) {
-    Exercise.find({
-      user_id:req.params['_id'],
-      date:{
-        $gte:(req.query.from),
-        $lte:(req.query.to)
-      }
-    })
-    .limit(req.query.limit)
-    .exec()
-    .then(data => {
-      if (data[0]){
-        res.json({
-          username:data[0].username,
-          count:data.length,
-          _id:data[0]['_id'],
-          log:data
-        })
-      }
-      else {
-        res.json({message:'No data'})
-      }
-    }).catch(err => console.log(err))
-  }
-  else if (req.query.from){
-    Exercise.find({
-      user_id:req.params['_id'],
-      date:{
-        $gte:(req.query.from),
-      }
-    })
-    .exec()
-    .then(data => {
-      if (data[0]){
-        res.json({
-          username:data[0].username,
-          count:data.length,
-          _id:data[0]['_id'],
-          log:data
-        })
-      }
-      else {
-        res.json({message:'No data'})
-      }
-    }).catch(err => console.log(err))
-  }
+  const {from, to ,limit} = req.query
+  Exercise.find({user_id:req.params['_id']})
+  .then(data => {
+    let temp = data;
+    if (from) {
+      temp = temp.filter(exe => (exe.date) > from) 
+    }
+    if (to) {
+      temp = temp.filter(exe => (exe.date) < to) 
+    }
+    if (limit) {
+      temp = temp.slice(0,limit)
+    }
 
-  else if (req.query.to){
-    Exercise.find({
-      user_id:req.params['_id'],
-      date:{
-        $lte:(req.query.to)
-      }
-    })
-    .exec()
-    .then(data => {
-      if (data[0]){
-        res.json({
-          username:data[0].username,
-          count:data.length,
-          _id:data[0]['_id'],
-          log:data
-        })
-      }
-      else {
-        res.json({message:'No data'})
-      }
-    }).catch(err => console.log(err))
-  }
+    const log = {
+      _id:req.params['_id'],
+      username:temp[0].username,
+      count:parseFloat(temp.length),
+      log:temp
+    }
 
-  else if (req.query.limit){
-    Exercise.find({
-      user_id:req.params['_id']
-    })
-    .limit(req.query.limit)
-    .exec()
-    .then(data => {
-      if (data[0]){
-        res.json({
-          username:data[0].username,
-          count:data.length,
-          _id:data[0]['_id'],
-          log:data
-        })
-      }
-      else {
-        res.json({message:'No data'})
-      }
-    }).catch(err => console.log(err))
-  }
+    res.json(log)
+  })
+//   if (req.query.from && req.query.to && req.query.limit) {
+//     Exercise.find({
+//       user_id:req.params['_id'],
+//       date:{
+//         $gte:(req.query.from),
+//         $lte:(req.query.to)
+//       }
+//     })
+//     .limit(req.query.limit)
+//     .exec()
+//     .then(data => {
+//       if (data[0]){
+//         res.json({
+//           username:data[0].username,
+//           count:data.length,
+//           _id:data[0]['_id'],
+//           log:data
+//         })
+//       }
+//       else {
+//         res.json({message:'No data'})
+//       }
+//     }).catch(err => console.log(err))
+//   }
+//   else if (req.query.from){
+//     Exercise.find({
+//       user_id:req.params['_id'],
+//       date:{
+//         $gte:(req.query.from),
+//       }
+//     })
+//     .exec()
+//     .then(data => {
+//       if (data[0]){
+//         res.json({
+//           username:data[0].username,
+//           count:data.length,
+//           _id:data[0]['_id'],
+//           log:data
+//         })
+//       }
+//       else {
+//         res.json({message:'No data'})
+//       }
+//     }).catch(err => console.log(err))
+//   }
 
-  else {
-    Exercise.find({
-      user_id:req.params['_id'],
-    })    
-    .then(data => {
-      res.json({
-        username:data[0].username,
-        count:data.length,
-        _id:data[0]['_id'],
-        log:data
-      })
-    }).catch(err => console.log(err))
-  }
+//   else if (req.query.to){
+//     Exercise.find({
+//       user_id:req.params['_id'],
+//       date:{
+//         $lte:(req.query.to)
+//       }
+//     })
+//     .exec()
+//     .then(data => {
+//       if (data[0]){
+//         res.json({
+//           username:data[0].username,
+//           count:data.length,
+//           _id:data[0]['_id'],
+//           log:data
+//         })
+//       }
+//       else {
+//         res.json({message:'No data'})
+//       }
+//     }).catch(err => console.log(err))
+//   }
+
+//   else if (req.query.limit){
+//     Exercise.find({
+//       user_id:req.params['_id']
+//     })
+//     .limit(req.query.limit)
+//     .exec()
+//     .then(data => {
+//       if (data[0]){
+//         res.json({
+//           username:data[0].username,
+//           count:data.length,
+//           _id:data[0]['_id'],
+//           log:data
+//         })
+//       }
+//       else {
+//         res.json({message:'No data'})
+//       }
+//     }).catch(err => console.log(err))
+//   }
+
+//   else {
+//     Exercise.find({
+//       user_id:req.params['_id'],
+//     })    
+//     .then(data => {
+//       res.json({
+//         username:data[0].username,
+//         count:data.length,
+//         _id:data[0]['_id'],
+//         log:data
+//       })
+//     }).catch(err => console.log(err))
+//   }
+// })
 })
-
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
