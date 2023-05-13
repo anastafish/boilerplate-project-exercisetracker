@@ -45,6 +45,7 @@ app.get('/api/users', (req, res) => {
 })
 
 app.post('/api/users/:_id/exercises', (req, res) => {
+  console.log(req.body.date)
   const date = [year, month, day] = req.body.date.split('-')
   const dateObj = new Date(+year, +month - 1,+day )
   Users.findById(req.params['_id']).then(user => {
