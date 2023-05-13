@@ -45,15 +45,14 @@ app.get('/api/users', (req, res) => {
 })
 
 app.post('/api/users/:_id/exercises', (req, res) => {
-  console.log(req.body.date)
   const date = [year, month, day] = req.body.date.split('-')
-  const dateObj = new Date(+year, +month - 1,+day )
+  const dateObj = req.body.date ? new Date(+year, +month - 1,+day ) : new Date()
   Users.findById(req.params['_id']).then(user => {
     const newExercise = new Exercise({
       username: user.username,
       description: req.body.description,
       duration: req.body.duration,
-      date: dateObj.toDateString() || new Date().toDateString(),
+      date: dateObj.toDateString(),
       user_id:user.id
     })
     newExercise.save().then(exercise => {
